@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 import firebase_admin
 from firebase_admin import credentials, firestore
 from dotenv import load_dotenv
+import uvicorn
 
 load_dotenv()  # for local testing
 
@@ -86,3 +87,7 @@ async def upload_pdf_and_store_scenes(file: UploadFile = File(...), email: str =
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         tmp_path.unlink(missing_ok=True)
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8080))
+    uvicorn.run("app:app", host="0.0.0.0", port=port)
